@@ -86,10 +86,58 @@ class IzendaImplementation extends Component {
 			.then(response => {
 				var token = response.data != null ? response.data.token : "No Token";
 				console.log("token:" + token);
+				//getIzendaApp(this.state.username);
 			})
 			.catch(error => {
 				console.log(error);
 			});
+	};
+
+	getIzendaApp = user => {
+		IzendaSynergy.config({
+			WebApiUrl: "http://159.89.90.84:81/api/",
+			BaseUrl: "/",
+			RootPath: "/izenda",
+			CssFile: "izenda-ui.css",
+			Routes: {
+				// "Settings": "settings",
+				// "New": "new",
+				// "Dashboard": "dashboard",
+				// "Report": "report",
+				// "ReportViewer": "reportviewer",
+				// "ReportViewerPopup": "reportviewerpopup",
+				// "Viewer": "viewer"
+				//"Report": route
+			},
+			Timeout: 3600
+			//"OnReceiveUnauthorizedResponse": redirectToLoginPage()
+		});
+
+		IzendaSynergy.setCurrentUserContext({
+			token: token
+		});
+
+		if (user == "Amit") {
+			IzendaSynergy.renderReportViewerPage(
+				document.getElementById("izenda-root"),
+				"4b49a107-2375-47f0-a1ec-a4bd492c4628"
+			);
+		} else if (user == "Abdul") {
+			IzendaSynergy.renderDashboardViewerPage(
+				document.getElementById("izenda-root"),
+				"b169dd43-8fe3-4bae-aa58-f6af7fdd6314"
+			);
+		} else {
+			IzendaSynergy.render(document.getElementById("izenda-root"));
+		}
+	};
+
+	redirectToLoginPage = () => {
+		console.log(
+			"Current user is unauthorized to access Izenda function. Navaigate to login page"
+		);
+
+		window.location.href = "login.html";
 	};
 }
 
